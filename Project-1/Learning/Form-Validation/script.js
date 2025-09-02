@@ -46,9 +46,19 @@ function validatePhone(phone) {
 
 function validatePassword(password) {
 	// At least 8 characters, contains uppercase, lowercase, number, and special character
-	const passwordRegex =
-		/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-	return passwordRegex.test(password);
+	const hasUppercase = /[A-Z]/.test(password);
+	const hasLowercase = /[a-z]/.test(password);
+	const hasNumber = /\d/.test(password);
+	const hasSpecialChar = /[@$!%*?&]/.test(password);
+	const isLongEnough = password.length >= 8;
+
+	return (
+		isLongEnough &&
+		hasUppercase &&
+		hasLowercase &&
+		hasNumber &&
+		hasSpecialChar
+	);
 }
 
 function showError(inputElement, message) {
@@ -63,25 +73,23 @@ function showError(inputElement, message) {
 	const isDark = currentTheme === "dark";
 
 	errorDiv.style.cssText = `
-                color: ${isDark ? "#fca5a5" : "#dc2626"};
-                font-size: 0.875rem;
-                margin-top: 5px;
-                padding: 10px 14px;
-                background: ${
-					isDark
-						? "rgba(239, 68, 68, 0.15)"
-						: "rgba(239, 68, 68, 0.2)"
-				};
-                border: 1px solid ${
-					isDark ? "rgba(239, 68, 68, 0.3)" : "rgba(239, 68, 68, 0.4)"
-				};
-                border-radius: 12px;
-                backdrop-filter: blur(20px);
-                -webkit-backdrop-filter: blur(20px);
-                animation: fadeIn 0.3s ease;
-                font-weight: 500;
-                box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-            `;
+					color: ${isDark ? "#fca5a5" : "#dc2626"};
+					font-size: 0.875rem;
+					margin-top: 5px;
+					padding: 10px 14px;
+					background: ${isDark ? "rgba(239, 68, 68, 0.15)" : "rgba(239, 68, 68, 0.2)"};
+					border: 1px solid ${
+						isDark
+							? "rgba(239, 68, 68, 0.3)"
+							: "rgba(239, 68, 68, 0.4)"
+					};
+					border-radius: 12px;
+					backdrop-filter: blur(20px);
+					-webkit-backdrop-filter: blur(20px);
+					animation: fadeIn 0.3s ease;
+					font-weight: 500;
+					box-shadow: 0 8px 32px rgba(239, 68, 68, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+			`;
 
 	inputElement.parentElement.appendChild(errorDiv);
 	inputElement.style.borderColor = isDark ? "#f87171" : "#ef4444";
@@ -115,23 +123,23 @@ function showNotification(message, type = "success") {
 	notification.className = "notification";
 	notification.textContent = message;
 	notification.style.cssText = `
-                position: fixed;
-                top: 80px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 12px;
-                color: white;
-                font-weight: 500;
-                z-index: 10000;
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
-                ${
-					type === "success"
-						? "background: rgba(16, 185, 129, 0.9);"
-						: "background: rgba(239, 68, 68, 0.9);"
-				}
-            `;
+					position: fixed;
+					top: 80px;
+					right: 20px;
+					padding: 15px 20px;
+					border-radius: 12px;
+					color: white;
+					font-weight: 500;
+					z-index: 10000;
+					backdrop-filter: blur(20px);
+					border: 1px solid rgba(255, 255, 255, 0.2);
+					animation: slideInRight 0.3s ease, fadeOut 0.3s ease 2.7s;
+					${
+						type === "success"
+							? "background: rgba(16, 185, 129, 0.9);"
+							: "background: rgba(239, 68, 68, 0.9);"
+					}
+			`;
 
 	document.body.appendChild(notification);
 
@@ -193,7 +201,7 @@ function setupRealTimeValidation() {
 		} else if (!validatePassword(password)) {
 			showError(
 				this,
-				"Password must contain uppercase, lowercase, number, and special character"
+				"Password must contain: uppercase letter, lowercase letter, number, and special character (@$!%*?&)"
 			);
 		} else {
 			showSuccess(this);
@@ -271,7 +279,7 @@ function handleFormSubmit(event) {
 	} else if (!validatePassword(data.password)) {
 		showError(
 			passwordInput,
-			"Password must contain uppercase, lowercase, number, and special character"
+			"Password must contain: uppercase letter, lowercase letter, number, and special character (@$!%*?&)"
 		);
 		isValid = false;
 	}
@@ -381,20 +389,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Add CSS animations
 	const style = document.createElement("style");
 	style.textContent = `
-                @keyframes fadeIn {
-                    from { opacity: 0; transform: translateY(-10px); }
-                    to { opacity: 1; transform: translateY(0); }
-                }
-                
-                @keyframes slideInRight {
-                    from { opacity: 0; transform: translateX(100px); }
-                    to { opacity: 1; transform: translateX(0); }
-                }
-                
-                @keyframes fadeOut {
-                    from { opacity: 1; }
-                    to { opacity: 0; }
-                }
-            `;
+					@keyframes fadeIn {
+							from { opacity: 0; transform: translateY(-10px); }
+							to { opacity: 1; transform: translateY(0); }
+					}
+					
+					@keyframes slideInRight {
+							from { opacity: 0; transform: translateX(100px); }
+							to { opacity: 1; transform: translateX(0); }
+					}
+					
+					@keyframes fadeOut {
+							from { opacity: 1; }
+							to { opacity: 0; }
+					}
+			`;
 	document.head.appendChild(style);
 });
