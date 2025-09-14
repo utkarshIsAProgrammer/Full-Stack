@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>BillSplit Pro</title>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body data-theme="light">
+		<div class="container">
+			<div class="header">
+				<h1 class="logo">🎯 BillSplit Pro</h1>
+				<p class="subtitle">
+					Split bills beautifully with precision and style
+				</p>
+				<button class="theme-toggle" onclick="toggleTheme()">
+					<span id="themeIcon">🌙</span>
+					<span id="themeText">Dark Mode</span>
+				</button>
+			</div>
+
+			<div class="main-content">
+				<div class="glass-card">
+					<h2 class="card-title">
+						<span class="card-icon">💰</span>
+						Bill Details
+					</h2>
+
+					<div class="input-group">
+						<label for="billAmount" class="input-label"
+							>Bill Amount ($)</label
+						>
+						<input
+							type="number"
+							id="billAmount"
+							class="input-field"
+							placeholder="Enter bill amount"
+							step="0.01"
+							oninput="calculateSplit()" />
+					</div>
+
+					<div class="input-group">
+						<label for="taxAmount" class="input-label">Tax</label>
+						<div class="input-with-toggle">
+							<div class="input-wrapper">
+								<input
+									type="number"
+									id="taxAmount"
+									class="input-field"
+									placeholder="Enter tax amount"
+									step="0.01"
+									oninput="calculateSplit()" />
+							</div>
+							<div class="toggle-switch">
+								<span
+									class="toggle-option active"
+									onclick="setTaxMode('dollar', this)"
+									>$</span
+								>
+								<span
+									class="toggle-option"
+									onclick="setTaxMode('percent', this)"
+									>%</span
+								>
+							</div>
+						</div>
+					</div>
+
+					<div class="input-group">
+						<label for="tipAmount" class="input-label">Tip</label>
+						<div class="input-with-toggle">
+							<div class="input-wrapper">
+								<input
+									type="number"
+									id="tipAmount"
+									class="input-field"
+									placeholder="Enter tip amount"
+									step="0.01"
+									oninput="calculateSplit()" />
+							</div>
+							<div class="toggle-switch">
+								<span
+									class="toggle-option active"
+									onclick="setTipMode('dollar', this)"
+									>$</span
+								>
+								<span
+									class="toggle-option"
+									onclick="setTipMode('percent', this)"
+									>%</span
+								>
+							</div>
+						</div>
+					</div>
+
+					<div class="input-group">
+						<label for="serviceAmount" class="input-label"
+							>Service Fee ($)</label
+						>
+						<input
+							type="number"
+							id="serviceAmount"
+							class="input-field"
+							placeholder="Enter service fee"
+							step="0.01"
+							oninput="calculateSplit()" />
+					</div>
+
+					<div class="input-group">
+						<label for="diners" class="input-label"
+							>Number of Diners</label
+						>
+						<input
+							type="number"
+							id="diners"
+							class="input-field"
+							placeholder="Enter number of people"
+							min="1"
+							value="2"
+							oninput="updateDiners()" />
+					</div>
+
+					<div class="split-mode-toggle">
+						<button
+							class="mode-btn active"
+							onclick="setSplitMode('even')">
+							Even Split
+						</button>
+						<button
+							class="mode-btn"
+							onclick="setSplitMode('uneven')">
+							Custom Split
+						</button>
+					</div>
+
+					<div id="dinersContainer" class="diners-container">
+						<!-- Dynamic diner inputs will be added here -->
+					</div>
+				</div>
+
+				<div class="glass-card results-card">
+					<h2 class="card-title">
+						<span class="card-icon">📊</span>
+						Split Results
+					</h2>
+
+					<div class="total-amount" id="totalAmount">$0.00</div>
+					<div class="per-person" id="perPerson">
+						$0.00 per person
+					</div>
+
+					<div class="breakdown">
+						<div class="breakdown-item">
+							<span>Bill Amount:</span>
+							<span id="breakdownBill">$0.00</span>
+						</div>
+						<div class="breakdown-item">
+							<span>Tax:</span>
+							<span id="breakdownTax">$0.00</span>
+						</div>
+						<div class="breakdown-item">
+							<span>Tip:</span>
+							<span id="breakdownTip">$0.00</span>
+						</div>
+						<div class="breakdown-item">
+							<span>Service Fee:</span>
+							<span id="breakdownService">$0.00</span>
+						</div>
+						<div class="breakdown-item">
+							<span>Total:</span>
+							<span id="breakdownTotal">$0.00</span>
+						</div>
+					</div>
+
+					<div class="export-options">
+						<button class="export-btn" onclick="copyToClipboard()">
+							<span>📋</span>
+							Copy Results
+						</button>
+						<button class="export-btn" onclick="shareResult()">
+							<span>📤</span>
+							Share
+						</button>
+						<button class="export-btn" onclick="exportToPDF()">
+							<span>📄</span>
+							Export PDF
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="notification" class="notification">
+			Bill split copied to clipboard!
+		</div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
